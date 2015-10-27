@@ -17,7 +17,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors['name'] = 'Name is required.';
     }
 
-    if (!preg_match('/^[^0-9][A-z0-9._%+-]+([.][A-z0-9_]+)*[@][A-z0-9_]+([.][A-z0-9_]+)*[.][A-z]{2,4}$/', $email)) {
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = 'Email is invalid.';
     }
 
