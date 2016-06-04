@@ -1,63 +1,79 @@
 <?php
-// Configure your Subject Prefix and Recipient here
-$subjectPrefix = '[Contact via website]';
-$emailTo       = '<YOUR_EMAIL_HERE>';
+require_once './vendor/autoload.php';
 
-$errors = array(); // array to hold validation errors
-$data   = array(); // array to pass back data
+$helperLoader = new SplClassLoader('Helpers', './vendor');
+$mailLoader   = new SplClassLoader('SimpleMail', './vendor');
 
-if($_SERVER['REQUEST_METHOD'] === 'POST') {
+$helperLoader->register();
+$mailLoader->register();
+
+use Helpers\Config;
+use SimpleMail\SimpleMail;
+
+$config = new Config;
+$config->load('./config/config.php');
+
+$errors = array();
+$data   = array();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name    = stripslashes(trim($_POST['name']));
     $email   = stripslashes(trim($_POST['email']));
     $subject = stripslashes(trim($_POST['subject']));
     $message = stripslashes(trim($_POST['message']));
+    $pattern = '/[\r\n]|Content-Type:|Bcc:|Cc:/i';
 
+    if (preg_match($pattern, $name) || preg_match($pattern, $email) || preg_match($pattern, $subject)) {
+        die("Header injection detected");
+    }
 
     if (empty($name)) {
-        $errors['name'] = 'Name is required.';
+        $errors['name'] = $config->get('messages.validation.emptyname');
     }
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors['email'] = 'Email is invalid.';
+        $errors['email'] = $config->get('messages.validation.emptyemail');
     }
 
     if (empty($subject)) {
-        $errors['subject'] = 'Subject is required.';
+        $errors['subject'] = $config->get('messages.validation.emptysubject');
     }
 
     if (empty($message)) {
-        $errors['message'] = 'Message is required.';
+        $errors['message'] = $config->get('messages.validation.emptymessage');
     }
 
-    // if there are any errors in our errors array, return a success boolean or false
     if (!empty($errors)) {
         $data['success'] = false;
         $data['errors']  = $errors;
     } else {
-        $subject = "$subjectPrefix $subject";
-        $body    = '
-            <strong>Name: </strong>'.$name.'<br />
-            <strong>Email: </strong>'.$email.'<br />
-            <strong>Message: </strong>'.nl2br($message).'<br />
-        ';
+        $mail = new SimpleMail();
 
-        $headers  = "MIME-Version: 1.1" . PHP_EOL;
-        $headers .= "Content-type: text/html; charset=utf-8" . PHP_EOL;
-        $headers .= "Content-Transfer-Encoding: 8bit" . PHP_EOL;
-        $headers .= "Date: " . date('r', $_SERVER['REQUEST_TIME']) . PHP_EOL;
-        $headers .= "Message-ID: <" . $_SERVER['REQUEST_TIME'] . md5($_SERVER['REQUEST_TIME']) . '@' . $_SERVER['SERVER_NAME'] . '>' . PHP_EOL;
-        $headers .= "From: " . "=?UTF-8?B?".base64_encode($name)."?=" . "<$email>" . PHP_EOL;
-        $headers .= "Return-Path: $emailTo" . PHP_EOL;
-        $headers .= "Reply-To: $email" . PHP_EOL;
-        $headers .= "X-Mailer: PHP/". phpversion() . PHP_EOL;
-        $headers .= "X-Originating-IP: " . $_SERVER['SERVER_ADDR'] . PHP_EOL;
+        $mail->setTo($config->get('emails.to'));
+        $mail->setFrom($config->get('emails.from'));
+        $mail->setSender($name);
+        $mail->setSubject($config->get('subject.prefix') . ' ' . $subject);
 
-        mail($emailTo, "=?utf-8?B?" . base64_encode($subject) . "?=", $body, $headers);
+        $body = "
+        <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
+        <html>
+            <head>
+                <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />
+            </head>
+            <body>
+                <h1>{$subject}</h1>
+                <p><strong>{$config->get('fields.name')}:</strong> {$name}</p>
+                <p><strong>{$config->get('fields.email')}:</strong> {$email}</p>
+                <p><strong>{$config->get('fields.message')}:</strong> {$message}</p>
+            </body>
+        </html>";
+
+        $mail->setHtml($body);
+        $mail->send();
 
         $data['success'] = true;
-        $data['message'] = 'Congratulations. Your message has been sent successfully';
+        $data['message'] = $config->get('messages.success');
     }
 
-    // return all our data to an AJAX call
     echo json_encode($data);
 }
