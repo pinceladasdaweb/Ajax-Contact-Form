@@ -32,25 +32,25 @@ $config->load('./config/config.php');
             <div class="form-group" id="name-field">
                 <label for="form-name" class="col-lg-2 control-label"><?php echo $config->get('fields.name'); ?></label>
                 <div class="col-lg-10">
-                    <input type="text" class="form-control" id="form-name" name="form-name" placeholder="<?php echo $config->get('fields.name'); ?>">
+                    <input type="text" class="form-control" id="form-name" name="form-name" placeholder="<?php echo $config->get('fields.name'); ?>" required>
                 </div>
             </div>
             <div class="form-group" id="email-field">
                 <label for="form-email" class="col-lg-2 control-label"><?php echo $config->get('fields.email'); ?></label>
                 <div class="col-lg-10">
-                    <input type="email" class="form-control" id="form-email" name="form-email" placeholder="<?php echo $config->get('fields.email'); ?>">
+                    <input type="email" class="form-control" id="form-email" name="form-email" placeholder="<?php echo $config->get('fields.email'); ?>" required>
                 </div>
             </div>
             <div class="form-group" id="subject-field">
                 <label for="form-subject" class="col-lg-2 control-label"><?php echo $config->get('fields.subject'); ?></label>
                 <div class="col-lg-10">
-                    <input type="text" class="form-control" id="form-subject" name="form-subject" placeholder="<?php echo $config->get('fields.subject'); ?>">
+                    <input type="text" class="form-control" id="form-subject" name="form-subject" placeholder="<?php echo $config->get('fields.subject'); ?>" required>
                 </div>
             </div>
             <div class="form-group" id="message-field">
                 <label for="form-message" class="col-lg-2 control-label"><?php echo $config->get('fields.message'); ?></label>
                 <div class="col-lg-10">
-                    <textarea class="form-control" rows="6" id="form-message" name="form-message" placeholder="<?php echo $config->get('fields.message'); ?>"></textarea>
+                    <textarea class="form-control" rows="6" id="form-message" name="form-message" placeholder="<?php echo $config->get('fields.message'); ?>" required></textarea>
                 </div>
             </div>
             <div class="form-group">
