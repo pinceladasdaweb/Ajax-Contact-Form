@@ -69,7 +69,7 @@
                 elements[0].parentNode.removeChild(elements[0]);
             }
         },
-        post: function (path, data, callback) {
+        post: function (path, data, success, fail) {
             var xhttp = new XMLHttpRequest();
 
             xhttp.open('POST', path, true);
@@ -79,16 +79,16 @@
             xhttp.setRequestHeader('Connection', 'close');
             xhttp.onreadystatechange = function () {
                 if (this.readyState === 4) {
-                    if (this.status >= 200 && this.status < 300) {
+                    if (this.status === 200) {
                         var response = '';
                         try {
                             response = JSON.parse(this.responseText);
                         } catch (err) {
                             response = this.responseText;
                         }
-                        callback.call(this, response);
+                        success.call(this, response);
                     } else {
-                        throw new Error(this.status + " - " + this.statusText);
+                        fail.call(this, this.responseText);
                     }
                 }
             };
@@ -123,7 +123,7 @@
                     'message' : document.querySelector('textarea[name="form-message"]').value
                 };
 
-                this.post(this.endpoint, this.param(formData), this.feedback.bind(this));
+                this.post(this.endpoint, this.param(formData), this.feedback.bind(this), this.fail.bind(this));
             }.bind(this), false);
         },
         feedback: function (data) {
@@ -188,8 +188,11 @@
                 this.empty(this.form);
                 this.form.insertAdjacentHTML('beforeend', success);
             }
+        },
+        fail: function (data) {
+            console.log(data);
         }
-    }
+    };
 
     return ContactForm;
 }));
