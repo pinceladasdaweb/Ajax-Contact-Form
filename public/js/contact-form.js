@@ -19,7 +19,7 @@
             return;
         }
 
-        this.form     = form.constructor.name === "Node" ? form : document.querySelector(form);
+        this.form     = form instanceof Node ? form : document.querySelector(form);
         this.endpoint = options.endpoint;
 
         this.send();
