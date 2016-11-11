@@ -119,6 +119,7 @@
                 formData = {
                     'name'    : document.querySelector('input[name="form-name"]').value,
                     'email'   : document.querySelector('input[name="form-email"]').value,
+                    'phone'   : document.querySelector('input[name="form-phone"]').value,
                     'subject' : document.querySelector('input[name="form-subject"]').value,
                     'message' : document.querySelector('textarea[name="form-message"]').value
                 };
@@ -165,6 +166,19 @@
                     });
 
                     subject.insertAdjacentHTML('beforeend', error);
+                }
+
+                if (data.errors.phone) {
+                    var phone = document.querySelector('input[name="form-phone"]').parentNode,
+                        error;
+
+                    this.addClass(phone, 'has-error');
+                    error = this.template(
+                        '<span class="help-block">{report}</span>', {
+                        report: data.errors.phone
+                    });
+
+                    phone.insertAdjacentHTML('beforeend', error);
                 }
 
                 if (data.errors.message) {

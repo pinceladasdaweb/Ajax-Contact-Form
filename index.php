@@ -41,6 +41,12 @@ $config->load('./config/config.php');
                     <input type="email" class="form-control" id="form-email" name="form-email" placeholder="<?php echo $config->get('fields.email'); ?>" required>
                 </div>
             </div>
+            <div class="form-group" id="phone-field">
+                <label for="form-email" class="col-lg-2 control-label"><?php echo $config->get('fields.phone'); ?></label>
+                <div class="col-lg-10">
+                    <input type="tel" class="form-control" id="form-phone" name="form-phone" placeholder="<?php echo $config->get('fields.phone'); ?>" required>
+                </div>
+            </div>
             <div class="form-group" id="subject-field">
                 <label for="form-subject" class="col-lg-2 control-label"><?php echo $config->get('fields.subject'); ?></label>
                 <div class="col-lg-10">

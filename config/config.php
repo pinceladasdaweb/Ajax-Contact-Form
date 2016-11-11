@@ -14,6 +14,7 @@ return [
         'validation' => [
             'emptyname'    => 'Name is required.',
             'emptyemail'   => 'Email is invalid.',
+            'emptyphone'   => 'Phone is required',
             'emptysubject' => 'Subject is required.',
             'emptymessage' => 'Message is required.'
         ]

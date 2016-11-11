@@ -19,6 +19,7 @@ $data   = array();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name    = stripslashes(trim($_POST['name']));
     $email   = stripslashes(trim($_POST['email']));
+    $phone   = stripslashes(trim($_POST['phone']));
     $subject = stripslashes(trim($_POST['subject']));
     $message = stripslashes(trim($_POST['message']));
     $pattern = '/[\r\n]|Content-Type:|Bcc:|Cc:/i';
@@ -33,6 +34,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = $config->get('messages.validation.emptyemail');
+    }
+
+    if (empty($phone)) {
+        $errors['phone'] = $config->get('messages.validation.emptyphone');
     }
 
     if (empty($subject)) {
@@ -64,6 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <h1>{$subject}</h1>
                 <p><strong>{$config->get('fields.name')}:</strong> {$name}</p>
                 <p><strong>{$config->get('fields.email')}:</strong> {$email}</p>
+                <p><strong>{$config->get('fields.phone')}:</strong> {$phone}</p>
                 <p><strong>{$config->get('fields.message')}:</strong> {$message}</p>
             </body>
         </html>";
