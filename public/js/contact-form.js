@@ -75,8 +75,6 @@
             xhttp.open('POST', path, true);
             xhttp.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
             xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-            xhttp.setRequestHeader('Content-length', data.length);
-            xhttp.setRequestHeader('Connection', 'close');
             xhttp.onreadystatechange = function () {
                 if (this.readyState === 4) {
                     if (this.status === 200) {
