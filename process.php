@@ -52,6 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $mail->setTo($config->get('emails.to'));
         $mail->setFrom($config->get('emails.from'));
         $mail->setSender($name);
+        $mail->setSenderEmail($email);
         $mail->setSubject($config->get('subject.prefix') . ' ' . $subject);
 
         $body = "
