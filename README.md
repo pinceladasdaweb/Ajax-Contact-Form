@@ -2,10 +2,6 @@
 
 A Simple Ajax Contact Form developed in PHP with HTML5 Form validation and pure JavaScript.
 
-## Demo
-
-View [demo here](http://www.pinceladasdaweb.com.br/blog/uploads/ajax-contact-form/).
-
 ## Download
 
 You can download the latest version or checkout all the releases [here](https://github.com/pinceladasdaweb/Ajax-Contact-Form/releases).
